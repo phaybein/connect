@@ -49,12 +49,10 @@ router.post('/register', (req, res) => {
         (user_inputs = [req.body.firstName, req.body.lastName, req.body.email])
       );
 
+      // GRAB KEY ITEMS FOR VALIDATION
       const passwordScore = passwordStrength.score;
       const passwordSuggestions = passwordStrength.feedback.suggestions;
       const passwordWarning = passwordStrength.feedback.warning;
-      // console.log(
-      //   `This is the score: ${passwordScore}, here is suggestions: ${passwordSuggestions} and here are the warnings: ${passwordWarning}`
-      // );
 
       // GENERATE SALT
       bcrypt.genSalt(11, (err, salt) => {
