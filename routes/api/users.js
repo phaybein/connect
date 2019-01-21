@@ -20,6 +20,17 @@ router.get('/test', (req, res) => {
 // @DESC REGISTER USER
 // @ACCESS PUBLIC
 router.post('/register', (req, res) => {
+  // CHECK PASSWORD STRENGTH
+  const passwordStrength = zxcvbn(
+    req.body.password,
+    (user_inputs = [req.body.firstName, req.body.lastName, req.body.email])
+  );
+
+  // GRAB KEY ITEMS FOR VALIDATION
+  const passwordScore = passwordStrength.score;
+  const passwordSuggestions = passwordStrength.feedback.suggestions;
+  const passwordWarning = passwordStrength.feedback.warning;
+
   // HAVE MONGOOSE FIND IF EXISTING USER
   User.findOne({
     email: req.body.email
@@ -43,17 +54,6 @@ router.post('/register', (req, res) => {
         password: req.body.password
       });
 
-      // CHECK PASSWORD STRENGTH
-      const passwordStrength = zxcvbn(
-        req.body.password,
-        (user_inputs = [req.body.firstName, req.body.lastName, req.body.email])
-      );
-
-      // GRAB KEY ITEMS FOR VALIDATION
-      const passwordScore = passwordStrength.score;
-      const passwordSuggestions = passwordStrength.feedback.suggestions;
-      const passwordWarning = passwordStrength.feedback.warning;
-
       // GENERATE SALT
       bcrypt.genSalt(11, (err, salt) => {
         // HASH PASSWORD
@@ -67,6 +67,31 @@ router.post('/register', (req, res) => {
         });
       });
     }
+  });
+});
+
+// @ROUTE GET API/USER/LOGIN
+// @DESC LOGIN USER / RETURNING JWT TOKEN
+// @ACCESS PUBLIC
+router.post('/login', (req, res) => {
+  const email = req.body.email.toLowerCase();
+  const password = req.body.password;
+
+  // FIND USER BY EMAIL
+  User.findOne({ email }).then(user => {
+    // CHECK FOR USER
+    if (!user) {
+      return res.status(404).json({ email: 'User not found' });
+    }
+
+    // CHECK PASSWORD
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (isMatch) {
+        res.json({ msg: 'success' });
+      } else {
+        return res.status(400).json({ password: 'password incorrect' });
+      }
+    });
   });
 });
 
