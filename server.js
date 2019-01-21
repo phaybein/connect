@@ -1,6 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+// BRING IN ROUTE FILES
+const users = require('./routes/api/users');
+const profile = require('./routes/api/profile');
+const posts = require('./routes/api/posts');
+
 // INITIALIZE EXPRESS
 const app = express();
 
@@ -18,6 +23,11 @@ mongoose
 
 // ROUTES
 app.get('/', (req, res) => res.send('Hi!'));
+
+// USE ROUTES
+app.use('/api/users', users);
+app.use('/api/profile', profile);
+app.use('/api/posts', posts);
 
 // PORT
 const port = process.env.PORT || 5000;
