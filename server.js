@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const passport = require('passport');
 
 // BRING IN ROUTE FILES
 const users = require('./routes/api/users');
@@ -13,6 +14,12 @@ const app = express();
 // BODY PARSER MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// PASSPORT MIDDLEWARE
+app.use(passport.initialize());
+
+// PASSPORT CONFIG
+require('./config/passport')(passport);
 
 // DB CONFIG
 const db = require('./config/keys').mongoURI;
@@ -27,7 +34,6 @@ mongoose
   .catch(err => console.log(err));
 
 // ROUTES
-app.get('/', (req, res) => res.send('Hi!'));
 
 // USE ROUTES
 app.use('/api/users', users);
