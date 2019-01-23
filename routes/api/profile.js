@@ -46,6 +46,25 @@ router.get(
   }
 );
 
+// @ROUTE GET API/PROFILE/ALL
+// @DESC GET ALL PROFILES
+// @ACCESS PUBLIC
+router.get('/all', (req, res) => {
+  const errors = {};
+  Profile.find()
+    .populate('user', ['firstName', 'lastName', 'avatar'])
+    .then(profiles => {
+      if (!profiles) {
+        errors.noProfiles = 'Could not locate any profiles';
+        res.status(404).json(errors);
+      }
+      res.json(profiles);
+    })
+    .catch(err =>
+      res.status(404).json({ profile: 'Could not locate any profiles' })
+    );
+});
+
 // @ROUTE GET API/PROFILE/HANDLE/:HANDLE
 // @DESC GET PROFILE BY HANDLE
 // @ACCESS PUBLIC
@@ -65,7 +84,37 @@ router.get('/handle/:handle', (req, res) => {
 
       res.json(profile);
     })
-    .catch(err => res.status(404).json(err));
+    .catch(err =>
+      res
+        .status(404)
+        .json({ profile: 'Could not locate a profile for this user' })
+    );
+});
+
+// @ROUTE GET API/PROFILE/USER/:USER_ID
+// @DESC GET PROFILE BY USER ID
+// @ACCESS PUBLIC
+router.get('/user/:user_id', (req, res) => {
+  // INITIALIZE ERRORS
+  const errors = {};
+
+  Profile.findOne({
+    user: req.params.user_id
+  })
+    .populate('user', ['firstName', 'lastName', 'avatar'])
+    .then(profile => {
+      if (!profile) {
+        errors.noProfile = 'Could not locate a profile for this user';
+        res.status(404).json(errors);
+      }
+
+      res.json(profile);
+    })
+    .catch(err =>
+      res
+        .status(404)
+        .json({ profile: 'Could not locate a profile for this user' })
+    );
 });
 
 // @ROUTE POST API/PROFILE
