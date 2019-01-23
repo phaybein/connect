@@ -7,6 +7,10 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 
+// LOAD INPUT VALIDATION
+const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
+
 // BRING IN USER MODEL
 const User = require('../../models/User');
 
@@ -19,20 +23,17 @@ router.get('/test', (req, res) => {
   });
 });
 
-// @ROUTE GET API/USER/REGISTER
+// @ROUTE POST API/USER/REGISTER
 // @DESC REGISTER USER
 // @ACCESS PUBLIC
 router.post('/register', (req, res) => {
-  // CHECK PASSWORD STRENGTH
-  const passwordStrength = zxcvbn(
-    req.body.password,
-    (user_inputs = [req.body.firstName, req.body.lastName, req.body.email])
-  );
+  // RUN INFORMATION THROUGH VALIDATION
+  const { errors, isValid } = validateRegisterInput(req.body);
 
-  // GRAB KEY ITEMS FOR VALIDATION
-  const passwordScore = passwordStrength.score;
-  const passwordSuggestions = passwordStrength.feedback.suggestions;
-  const passwordWarning = passwordStrength.feedback.warning;
+  // CHECK VALIDATION
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
 
   // HAVE MONGOOSE FIND IF EXISTING USER
   User.findOne({
@@ -40,7 +41,8 @@ router.post('/register', (req, res) => {
   }).then(user => {
     if (user) {
       // INFORM USER OF EXISTING EMAIL
-      return res.status(400).json({ email: 'Email already exists' });
+      errors.email = 'Email already exists';
+      return res.status(400).json(errors);
     } else {
       const avatar = gravatar.url(req.body.email, {
         s: '200', // SIZE
@@ -73,10 +75,18 @@ router.post('/register', (req, res) => {
   });
 });
 
-// @ROUTE GET API/USER/LOGIN
+// @ROUTE POST API/USER/LOGIN
 // @DESC LOGIN USER / RETURNING JWT TOKEN
 // @ACCESS PUBLIC
 router.post('/login', (req, res) => {
+  // RUN INFORMATION THROUGH VALIDATION
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  // CHECK VALIDATION
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
 
@@ -84,7 +94,8 @@ router.post('/login', (req, res) => {
   User.findOne({ email }).then(user => {
     // CHECK FOR USER
     if (!user) {
-      return res.status(404).json({ email: 'User not found' });
+      errors.email = 'User not found';
+      return res.status(404).json(errors);
     }
 
     // CHECK PASSWORD
@@ -113,7 +124,8 @@ router.post('/login', (req, res) => {
           }
         );
       } else {
-        return res.status(400).json({ password: 'password incorrect' });
+        errors.password = 'Password incorrect';
+        return res.status(400).json(errors);
       }
     });
   });
