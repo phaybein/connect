@@ -46,6 +46,28 @@ router.get(
   }
 );
 
+// @ROUTE GET API/PROFILE/HANDLE/:HANDLE
+// @DESC GET PROFILE BY HANDLE
+// @ACCESS PUBLIC
+router.get('/handle/:handle', (req, res) => {
+  // INITIALIZE ERRORS
+  const errors = {};
+
+  Profile.findOne({
+    handle: req.params.handle
+  })
+    .populate('user', ['firstName', 'lastName', 'avatar'])
+    .then(profile => {
+      if (!profile) {
+        errors.noProfile = 'Could not locate a profile for this user';
+        res.status(404).json(errors);
+      }
+
+      res.json(profile);
+    })
+    .catch(err => res.status(404).json(err));
+});
+
 // @ROUTE POST API/PROFILE
 // @DESC CREATE OR EDIT USER PROFILE
 // @ACCESS PRIVATE
