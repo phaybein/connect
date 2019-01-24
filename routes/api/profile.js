@@ -261,4 +261,58 @@ router.post(
   }
 );
 
+// @ROUTE DELETE API/PROFILE/EXPERIENCE/:EXPERIENCE_ID
+// @DESC DELETE EXPERIENCE FROM PROFILE
+// @ACCESS PRIVATE
+router.delete(
+  '/experience/:experience_id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({
+      user: req.user.id
+    }).then(profile => {
+      // GET REMOVE INDEX
+      const removeIndex = profile.experience
+        .map(item => item.id) // CREATE A LIST OF IDS
+        .indexOf(req.params.experience_id); // GRAB ID
+
+      // SPLICE OUT OF ARRAY
+      profile.experience.splice(removeIndex, 1);
+
+      // SAVE
+      profile
+        .save()
+        .then(profile => res.json(profile))
+        .catch(err => res.status(404).json(err));
+    });
+  }
+);
+
+// @ROUTE DELETE API/PROFILE/EDUCATION/:EDUCATION_ID
+// @DESC DELETE EDUCATION FROM PROFILE
+// @ACCESS PRIVATE
+router.delete(
+  '/education/:education_id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({
+      user: req.user.id
+    }).then(profile => {
+      // GET REMOVE INDEX
+      const removeIndex = profile.education
+        .map(item => item.id) // CREATE A LIST OF IDS
+        .indexOf(req.params.education_id); // GRAB ID
+
+      // SPLICE OUT OF ARRAY
+      profile.education.splice(removeIndex, 1);
+
+      // SAVE
+      profile
+        .save()
+        .then(profile => res.json(profile))
+        .catch(err => res.status(404).json(err));
+    });
+  }
+);
+
 module.exports = router;
