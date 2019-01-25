@@ -171,4 +171,38 @@ router.post(
   }
 );
 
+// @ROUTE POST API/COMMENT/:ID
+// @DESC ADD A COMMENT TO POST
+// @ACCESS PRIVATE
+router.post(
+  '/comment/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    // RUN INFORMATION THROUGH VALIDATION
+    const { errors, isValid } = validatePostInput(req.body);
+
+    // CHECK VALIDATION
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Post.findById(req.params.id)
+      .then(post => {
+        const newComment = {
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          user: req.user.id
+        };
+
+        // ADD TO COMMENTS ARRAY
+        post.comments.push(newComment);
+
+        // SAVE
+        post.save().then(post => res.json(post));
+      })
+      .catch(err => res.status(404).json({ postNotFound: 'No post found' }));
+  }
+);
+
 module.exports = router;
