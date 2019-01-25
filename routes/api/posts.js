@@ -100,7 +100,7 @@ router.delete(
   }
 );
 
-// @ROUTE POST API/LIKE/:ID
+// @ROUTE POST API/POSTS/LIKE/:ID
 // @DESC LIKE POST
 // @ACCESS PRIVATE
 router.post(
@@ -133,7 +133,7 @@ router.post(
   }
 );
 
-// @ROUTE POST API/UNLIKE/:ID
+// @ROUTE POST API/POSTS/UNLIKE/:ID
 // @DESC UNLIKE POST
 // @ACCESS PRIVATE
 router.post(
@@ -171,7 +171,7 @@ router.post(
   }
 );
 
-// @ROUTE POST API/COMMENT/:ID
+// @ROUTE POST API/POSTS/COMMENT/:ID
 // @DESC ADD A COMMENT TO POST
 // @ACCESS PRIVATE
 router.post(
@@ -197,6 +197,41 @@ router.post(
 
         // ADD TO COMMENTS ARRAY
         post.comments.push(newComment);
+
+        // SAVE
+        post.save().then(post => res.json(post));
+      })
+      .catch(err => res.status(404).json({ postNotFound: 'No post found' }));
+  }
+);
+
+// @ROUTE DELETE API/POSTS/COMMENT/:ID/:COMMENT_ID
+// @DESC DELETE A COMMENT FROM POST
+// @ACCESS PRIVATE
+router.delete(
+  '/comment/:id/:comment_id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        // VERIFY COMMENT EXISTS
+        if (
+          post.comments.filter(
+            comment => comment._id.toString() === req.params.comment_id
+          ).length === 0
+        ) {
+          return res
+            .status(404)
+            .json({ commentDoesNotExist: 'Comment does not exist' });
+        }
+
+        // GET REMOVE INDEX
+        const removeIndex = post.comments
+          .map(comment => comment._id.toString())
+          .indexOf(req.params.comment_id);
+
+        // SPLICE COMMENT OUT OF ARRAY
+        post.comments.splice(removeIndex, 1);
 
         // SAVE
         post.save().then(post => res.json(post));
