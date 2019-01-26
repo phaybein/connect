@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
+// STYLES
 import './landing.scss';
 
 export class Landing extends Component {
@@ -15,12 +18,12 @@ export class Landing extends Component {
                   Create an account, share posts and interact with other users
                 </p>
                 <hr />
-                <a href="register.html" class="btn btn-lg btn-info mr-2">
+                <Link to="/register" class="btn btn-lg btn-info mr-2">
                   Sign Up
-                </a>
-                <a href="login.html" class="btn btn-lg btn-light">
+                </Link>
+                <Link to="/login" class="btn btn-lg btn-light">
                   Login
-                </a>
+                </Link>
               </div>
             </div>
           </div>
