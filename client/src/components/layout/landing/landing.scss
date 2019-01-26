@@ -4,8 +4,8 @@
   background-size: cover;
   background-position: center;
   height: 100vh;
-  margin-top: -24px;
-  margin-bottom: -50px;
+  margin-top: -33px;
+  margin-bottom: -66px;
 
   .landing-inner {
     padding-top: 80px;
@@ -18,5 +18,9 @@
     left: 0;
     width: 100%;
     height: 100%;
+  }
+
+  h1 {
+    text-transform: uppercase;
   }
 }

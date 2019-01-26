@@ -1,0 +1,74 @@
+/*****
+    FLUID TEXT
+*****/
+
+html {
+  font-size: 1rem;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  text-shadow: 0 0 0 #f00, 0 0 1px transparent;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.074rem;
+}
+
+h2 {
+  font-size: 1.728rem;
+}
+
+h3 {
+  font-size: 1.44rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+}
+
+small {
+  font-size: 0.833rem;
+}
+
+p,
+ol {
+  margin: 0 auto;
+  max-width: 65ch;
+}
+
+@media screen and (min-width: 320px) {
+  html {
+    font-size: calc(16px + 6 * ((100vw - 320px) / 1280));
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  html {
+    font-size: 21px;
+  }
+}
+
+img {
+  width: 100%;
+}
+
+.card-form {
+  opacity: 0.9;
+}
+
+.latest-profiles-img {
+  width: 40px;
+  height: 40px;
+}
+
+.form-control::placeholder {
+  color: #bbb !important;
+}
