@@ -9,7 +9,8 @@ export class Register extends Component {
       lastName: '',
       email: '',
       password: '',
-      password2: ''
+      password2: '',
+      errors: {}
     };
 
     this.onChange = this.onChange.bind(this);
