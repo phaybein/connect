@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+
+// STYLES
 import './login.scss';
 
 export class Login extends Component {
