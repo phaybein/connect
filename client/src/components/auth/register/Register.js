@@ -2,26 +2,18 @@ import React, { Component } from 'react';
 import './register.scss';
 
 export class Register extends Component {
-  constructor() {
-    super();
-    this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      password2: '',
-      errors: {}
-    };
+  state = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    password2: '',
+    errors: {}
+  };
 
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-  }
+  onChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-  onSubmit(e) {
+  onSubmit = e => {
     e.preventDefault();
 
     const newUser = {
@@ -33,7 +25,7 @@ export class Register extends Component {
     };
 
     console.log(newUser);
-  }
+  };
 
   render() {
     return (

@@ -2,23 +2,15 @@ import React, { Component } from 'react';
 import './login.scss';
 
 export class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      email: '',
-      password: '',
-      errors: {}
-    };
+  state = {
+    email: '',
+    password: '',
+    errors: {}
+  };
 
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-  }
+  onChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-  onSubmit(e) {
+  onSubmit = e => {
     e.preventDefault();
 
     const loginCredentials = {
@@ -27,7 +19,7 @@ export class Login extends Component {
     };
 
     console.log(loginCredentials);
-  }
+  };
 
   render() {
     return (
