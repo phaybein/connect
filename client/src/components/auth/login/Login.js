@@ -36,6 +36,7 @@ export class Login extends Component {
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <input
+                    autoFocus
                     type="email"
                     className="form-control form-control-lg"
                     placeholder="Email Address"
