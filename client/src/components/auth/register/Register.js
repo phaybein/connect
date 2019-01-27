@@ -48,9 +48,10 @@ export class Register extends Component {
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Sign Up</h1>
               <p className="lead text-center">Create your Connect account</p>
-              <form noValidate onSubmit={this.onSubmit}>
+              <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <input
+                    required
                     autoFocus
                     type="text"
                     className={classnames('form-control form-control-lg', {
@@ -67,6 +68,7 @@ export class Register extends Component {
                 </div>
                 <div className="form-group">
                   <input
+                    required
                     type="text"
                     className={classnames('form-control form-control-lg', {
                       'is-invalid': errors.lastName
@@ -82,6 +84,7 @@ export class Register extends Component {
                 </div>
                 <div className="form-group">
                   <input
+                    required
                     type="email"
                     className={classnames('form-control form-control-lg', {
                       'is-invalid': errors.email
@@ -105,6 +108,7 @@ export class Register extends Component {
                 </div>
                 <div className="form-group">
                   <input
+                    required
                     type="password"
                     className={classnames('form-control form-control-lg', {
                       'is-invalid': errors.password
@@ -120,6 +124,7 @@ export class Register extends Component {
                 </div>
                 <div className="form-group">
                   <input
+                    required
                     type="password"
                     className={classnames('form-control form-control-lg', {
                       'is-invalid': errors.password2
