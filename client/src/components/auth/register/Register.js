@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { registerUser } from '../../../actions/authActions';
 import propTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 // STYLES
 import './register.scss';
@@ -40,7 +41,7 @@ export class Register extends Component {
       password2: this.state.password2
     };
 
-    this.props.registerUser(newUser);
+    this.props.registerUser(newUser, this.props.history);
   };
 
   render() {
@@ -168,4 +169,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { registerUser }
-)(Register);
+)(withRouter(Register));
