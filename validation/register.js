@@ -33,19 +33,14 @@ module.exports = function validateRegisterInput(data) {
     errors.lastName = 'Last name field is required';
   }
 
-  // CHECK IF EMAIL FIELD IS EMPTY
-  if (Validator.isEmpty(data.email)) {
-    errors.email = 'Email field is required';
-  }
-
   // CHECK IF VALID EMAIL
   if (!Validator.isEmail(data.email)) {
     errors.email = 'Please enter a valid email';
   }
 
-  // CHECK IF PASSWORD FIELD IS EMPTY
-  if (Validator.isEmpty(data.password)) {
-    errors.password = 'Password field is required';
+  // CHECK IF EMAIL FIELD IS EMPTY
+  if (Validator.isEmpty(data.email)) {
+    errors.email = 'Email field is required';
   }
 
   // CHECK PASSWORD STRENGTH
@@ -62,23 +57,28 @@ module.exports = function validateRegisterInput(data) {
   if (passwordScore <= 2) {
     // IF SUGG ARE NOT EMPTY PUSH TO ERRORS
     if (passwordSuggestions) {
-      errors.passwordSuggestions = passwordSuggestions;
+      errors.password = passwordSuggestions;
     }
 
     // IF SUGG ARE NOT EMPTY PUSH TO ERRORS
     if (passwordWarnings) {
-      errors.passwordWarnings = passwordWarnings;
+      errors.password = passwordWarnings;
     }
   }
 
-  // CHECK IF PASSWORD2 FIELD IS EMPTY
-  if (Validator.isEmpty(data.password2)) {
-    errors.password2 = 'Confirm password field is required';
+  // CHECK IF PASSWORD FIELD IS EMPTY
+  if (Validator.isEmpty(data.password)) {
+    errors.password = 'Password field is required';
   }
 
   // CHECK IF PASSWORD2 FIELD IS EMPTY
   if (!Validator.equals(data.password, data.password2)) {
     errors.password2 = 'Please ensure password fields match';
+  }
+
+  // CHECK IF PASSWORD2 FIELD IS EMPTY
+  if (Validator.isEmpty(data.password2)) {
+    errors.password2 = 'Confirm password field is required';
   }
 
   return {

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { registerUser } from '../../../actions/authActions';
+import propTypes from 'prop-types';
 
 // STYLES
 import './register.scss';
@@ -16,6 +18,15 @@ export class Register extends Component {
     errors: {}
   };
 
+  // IF ERRORS RECEIVED SET TO ERRORS STATE
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
+  }
+
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   onSubmit = e => {
@@ -29,13 +40,7 @@ export class Register extends Component {
       password2: this.state.password2
     };
 
-    console.log(newUser);
-
-    // MAKE SUBMIT
-    axios
-      .post('/api/users/register', newUser)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({ errors: err.response.data }));
+    this.props.registerUser(newUser);
   };
 
   render() {
@@ -48,7 +53,7 @@ export class Register extends Component {
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Sign Up</h1>
               <p className="lead text-center">Create your Connect account</p>
-              <form onSubmit={this.onSubmit}>
+              <form noValidate onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <input
                     required
@@ -148,4 +153,19 @@ export class Register extends Component {
   }
 }
 
-export default Register;
+// PROPTYPES
+Register.propTypes = {
+  registerUser: propTypes.func.isRequired,
+  auth: propTypes.object.isRequired,
+  errors: propTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(Register);
