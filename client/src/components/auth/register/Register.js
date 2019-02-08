@@ -19,6 +19,13 @@ export class Register extends Component {
     errors: {}
   };
 
+  // REDIRECT LOGGED IN USER TO DASHBAORD
+  componentDidMount() {
+    if(this.props.auth.isAuthenticated) {
+      this.props.history.push('./dashboard');
+    }
+  };
+
   // IF ERRORS RECEIVED SET TO ERRORS STATE
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {

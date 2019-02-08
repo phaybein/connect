@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import propTypes from 'prop-types';
+import {connect } from 'react-redux';
 
 // STYLES
 import './landing.scss';
 
 export class Landing extends Component {
+  
+// REDIRECT LOGGED IN USER TO DASHBOARD
+  componentDidMount() {
+    if(this.props.auth.isAuthenticated) {
+      this.props.history.push('./dashboard');
+    }
+  };
+  
   render() {
     return (
       <div className="landing">
@@ -33,4 +43,12 @@ export class Landing extends Component {
   }
 }
 
-export default Landing;
+Landing.propTypes = {
+  auth: propTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+export default connect(mapStateToProps)(Landing);

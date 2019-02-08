@@ -14,6 +14,13 @@ export class Login extends Component {
     errors: {}
   };
 
+  // REDIRECTED LOGGED IN USER TO DASHBOARD
+  componentDidMount() {
+    if(this.props.auth.isAuthenticated) {
+      this.props.history.push('./dashboard');
+    }
+  };
+
   // IF ERRORS RECEIVED SET TO ERRORS STATE
   componentWillReceiveProps(nextProps) {
     // CHECK USER IS AUTHENTICATED
@@ -26,7 +33,7 @@ export class Login extends Component {
         errors: nextProps.errors
       });
     }
-  }
+  };
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
